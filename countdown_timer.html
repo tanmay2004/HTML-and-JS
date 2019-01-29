@@ -1,0 +1,120 @@
+<!-- Countdown from any number to zero -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TIMER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+
+  <style>
+    body {
+      background-color: #c0d680;
+      font-family: Tahoma;
+    }
+    
+    h1, h3 {
+      display: inline;
+    }
+    
+    .custom_button {
+      width: 200px;
+      height: 40px;
+      background-color: #c0d680;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border: 3px solid #fff;
+      transition: 1s;
+    }
+    
+    .custom_button:hover {
+      cursor: pointer;
+      background-color: white;
+      color: #c0d680;
+    }
+
+    .output_text {
+      font-size: 400px;
+      font-family: Helvetica;
+    }
+    
+    .message {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+  </style>
+
+  <body>
+    <h1>L</h1><h3>ET'S</h3><h1> S</h1><h3>ET</h3><h1> A T</h1><h3>IMER!</h3> <br><br>
+    <h3>This program sets a timer for as many seconds as you want!</h3> <br><br>
+    
+    <form id="TimerDuration" onsubmit="event.preventDefault()">
+      <label>Seconds:</label>
+      <input type="number" id="input" name="seconds" placeholder=" Enter your number" required> <br>
+      <div class="message" id="error_display"><i class="fa fa-exclamation-triangle"></i>&nbsp;ERROR: Please try again! You did not enter a natural number.</div>
+      <br>
+      <input type="submit" id="start_btn" name="btn" class="custom_button" value="Start the Timer!" onclick="assignValueAndCheck()"></input>
+    </form>
+    
+    <center><div class="output_text" id="result"></div></center>
+    
+    <audio id="alarm">
+      <source src="alarm_audio.mp3">
+    </audio>
+    
+  </body>
+
+  <script>
+    var alarm = document.getElementById("alarm");
+    var p_countdown = document.getElementById("result");
+    var timer_btn = document.getElementById("start_btn");
+    var sec_input_element = document.getElementById("input");
+    var sec_val; // Global Variable which will contain the value of the 'seconds' input of the user
+
+    function assignValueAndCheck () {
+      sec_val = input.value;
+      if (correctValueGiven()) {
+        startTimer();
+      } else if (sec_val != "") {
+        $("#error_display").fadeIn();
+      } else {
+        $("#error_display").fadeOut();
+      }
+    }
+
+    function startTimer() {
+      p_countdown.innerHTML = sec_val;
+      sec_val = sec_val - 1;
+      timer_btn.disabled = true;
+      timer_btn.style.cursor = "not-allowed";
+      sec_input_element.disabled = true;
+      sec_input_element.style.cursor = "not-allowed";
+      $("#error_display").fadeOut();
+
+      if (sec_val > -2) {
+        setTimeout(startTimer, 1000);
+        if (sec_val == 2) {
+          p_countdown.style.color = "red";
+        }
+
+      } else {
+        p_countdown.style.color = "red";
+        p_countdown.style.fontSize = "275px";
+        p_countdown.innerHTML = "Time's Up!";
+        alarm.play();
+      }
+
+    }
+
+    // This function returns false if input given does not match the timer's criteria and true if it does
+    function correctValueGiven() {
+      if (sec_val < 1) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</html>
