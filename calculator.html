@@ -1,0 +1,182 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="Calculator_Title.png">
+    <title>My Calculator</title>
+    <style>     
+      p {
+        font-size: 25px;
+        font-weight: bold;
+        font-family: Georgia;
+      }
+        
+      button {
+        background-color: black;
+        color: white;
+        border: solid 2px black;
+        transition: 0.5s;
+      }
+      
+      button:hover {
+        background-color: #b2e1e6; 
+        color: black;
+      }
+      
+      #calculate {
+        height: 30px;
+        width: 150px;
+        cursor: pointer;
+      }
+      
+      div#feedback_form {
+        display: none;
+      }
+      
+      p#thanks_text {
+        display: none;
+        font-size: 25px;
+        font-family: Helvetica; <!-- Times New Roman used originally -->
+      }
+    </style>
+  </head>
+  <body bgcolor="#b2e1e6">
+    <h1>The Great Calculator!</h1>
+    <i>Number 1:</i>
+    <input type="number" id="num_1" value=0 placeholder=" Enter your 1st number" size="10">
+    <br>
+    <i>Number 2:</i>
+    <input type="number" id="num_2" value=0 placeholder=" Enter your 2nd number" size="10">
+    <br>
+    <i>Operation:</i>
+    <select id="chooseOp">
+      <option value="" disabled selected>Select your option</option>
+      <option value="+">Add</option>
+      <option value="-">Subtract</option>
+      <option value="*">Multiply</option>
+      <option value="/">Divide</option>
+      <option value="%">Remainder</option>
+      <option value="^">Exponentiation</option>
+    </select>
+    
+    <br><br>
+    <button id="calculate" onclick="determineOp()" type="submit"><b>Calculate Answer!</b></button>
+    <p id="thanks_text" style="color: #009933;"></p>
+    <p id="result"></p>
+    
+    <div id="yes_or_no">
+      Was this program useful to you?
+      <button id="good_program" onclick="thankUser()">Yes</button>&nbsp;<button id="bad_program" onclick="make_form_visible()">No</button>
+    </div>
+    
+    <br>
+    
+    <div id="feedback_form">
+      How can we improve on this page? (Layout, Features, Bugs, etc.) <br><br>
+      <form action="">
+        <textarea name="user_name" placeholder="Your Name"></textarea> <br>
+        <textarea name="feedback" placeholder="Your Feedback...." style="height:125px;width:310px;"></textarea>
+      </form>
+      <input type="submit" value="Send Feedback" onclick="thankUser()">
+    </div>
+   
+    <!-- <button onclick="window.location.reload()" id="reload_page">Reload the Page</button> -->
+  </body>
+  <script>
+    var resultDisplayText = document.getElementById("result"); // this is a globally defined variable for the 'result' <p> because it is used a lot of times in this code
+
+    function determineOp() {
+      var operator = document.getElementById("chooseOp");
+      var userOp = operator.options[operator.selectedIndex].value;
+      resultDisplayText.style.color = 'black';
+      if (userOp == "+") {
+        add(num_1.value, num_2.value)
+      } else if (userOp == "-") {
+        subtract(num_1.value, num_2.value)
+      } else if (userOp == "*") {
+        multiply(num_1.value, num_2.value)
+      } else if (userOp == "/") {
+        divide(num_1.value, num_2.value)
+      } else if (userOp == "%") {
+        modulo(num_1.value, num_2.value)
+      } else if (userOp == "^") {
+        exponent(num_1.value, num_2.value)
+      } else {
+        resultDisplayText.innerHTML = "You did not choose any operator. Please try again."
+      }
+    }
+
+    function add(x, y) {
+      var sum = parseInt(x) + parseInt(y);
+      resultDisplayText.innerHTML = "The sum of " + x + " and " + y + " is " + sum;
+    }
+
+    function subtract(x, y) {
+      var difference = parseInt(x) - parseInt(y);
+      resultDisplayText.innerHTML = "The difference of " + x + " and " + y + " is " + difference;
+    }
+
+    function multiply(x, y) {
+      var product = parseInt(x) * parseInt(y);
+      resultDisplayText.innerHTML = "The product of " + x + " and " + y + " is " + product;
+    }
+
+    function divide(x, y) {
+      var quotient = parseInt(x) / parseInt(y);
+      resultDisplayText.innerHTML = "The quotient of " + x + " and " + y + " is " + quotient;
+    }
+
+    function exponent(x, y) {
+      var answer = Math.pow(parseInt(x), parseInt(y));
+      resultDisplayText.innerHTML = "The result of " + x + " to the power " + y + " is " + answer;
+    }
+
+    function modulo(x, y) {
+      if (num_2.value == 0) {
+        resultDisplayText.style.color = 'red';
+        resultDisplayText.innerHTML = "ERROR: No number can be divided by 0. Please try again.";
+      } else {
+        var remainder = parseInt(x) % parseInt(y);
+        resultDisplayText.innerHTML = "The remainder of " + x + " divided by " + y + " is " + remainder;
+      }
+    }
+
+    function make_form_visible() {
+      var divelement = document.getElementById("feedback_form");
+      divelement.style.display = "block";
+      removePointerEventsForElement("good_program");
+      removePointerEventsForElement("bad_program");
+    }
+
+    function thankUser() {
+      var div1 = document.getElementById("yes_or_no");
+      div1.parentNode.removeChild(div1);
+      
+      var div2 = document.getElementById("feedback_form");
+      div2.parentNode.removeChild(div2);
+      
+      resultDisplayText.style.display = "none";
+      
+      var thanks_msg = document.getElementById("thanks_text");
+      thanks_msg.style.display = "block";
+      thanks_msg.innerHTML = "&#10004; Thank you for your valuable feedback!";
+      setTimeout(function() {
+        fadeOutThanks() // runs first
+        manipulateResultPara() // runs second
+      }, 3500)
+    }
+
+    function removePointerEventsForElement(id) {
+      var elementChanged = document.getElementById(id);
+      elementChanged.style.pointerEvents = "none";
+    }
+
+    function manipulateResultPara() {
+      resultDisplayText.innerHTML = "";
+      resultDisplayText.style.display = "block";
+    }
+
+    function fadeOutThanks() {
+      $("#thanks_text").fadeOut();
+    }
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> <!-- js script to use jquery library -->
+</html>
