@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>TESTING</title>
+    <style>
+      .color-btn {
+        background-color: transparent;
+        border: 1px solid black;
+        transition: 0.8s;
+        height: 25px;
+        width: auto;
+        font-weight: bold;
+        text-transform: capitalize;
+        margin-right: 15px;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <h1>The Most Vibrant Background Colours of HTML</h1>
+    <h2>Hover and Click on these buttons to see them in action!</h2>
+    
+    <div id="all_btns"></div>
+    <!-- The beauty of this document is that you can increase the amount of colour buttons that are there very simply by just adding another string to the JS 'colors' array!! -->
+
+    <br>
+    <div id="src"><b>Source for Colours:</b> https://www.w3schools.com/colors/colors_trends.asp</div>
+  </body>
+  
+  <script>
+    // This program detects the value of the clicked button and sets the body's background-color as well as its own hover background-color to that.
+    var colors = ["Turquoise", "Gold", "Dark Sea Green", "Tomato", "Rosy Brown", "Tan"];
+
+    function createBtn (item) {
+      var no_spaces_item = item.replace(/\s/g, "");
+      var content_div = document.getElementById("all_btns");
+      var para = document.createElement("input");
+      para.setAttribute("value", item);
+      para.setAttribute("class", "color-btn");
+      para.setAttribute("type", "button");
+      para.setAttribute("onclick", "bodyBgColor(\""+no_spaces_item+"\")");
+      para.setAttribute("onMouseOver", "this.style.backgroundColor=\""+no_spaces_item+"\"");
+      para.setAttribute("onMouseOut", "this.style.backgroundColor='transparent'");
+      content_div.appendChild(para);
+    }
+
+    function bodyBgColor (color_name) {
+      document.body.style.backgroundColor = color_name;
+    }
+
+    colors.forEach(createBtn);
+  </script>
+</html>
